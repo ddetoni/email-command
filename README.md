@@ -11,14 +11,14 @@ Notes
     * It deletes all messages it opened
     * Some email providers like gmail still keep deleted messages depending on user setting
 * Run run.py or in background with nohup python run.py > /dev/null 2>&1 &
-* Use the following email body format:
-
-    {"type": "terminal", "command": ["ls", "-la"]}
-    {"type": "terminal", "command": ["touch", "meow"]}
-
 * Must be a valid JSON format
 * One command per line
 * **Use at your own risk!**
+
+Use the following email body format:
+
+    {"type": "terminal", "command": ["ls", "-la"]}
+    {"type": "terminal", "command": ["touch", "meow"]}
 
 
 License
