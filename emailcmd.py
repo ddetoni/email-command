@@ -20,7 +20,7 @@ class Email(object):
 
         Keyword arguments:
         delMsgs -- Mark all messages as deleted on retrieve
-                   Note: Providers like Gmail can still keep deleted messages 
+                   Note: Providers like Gmail can still keep deleted messages
                    depending on user setting.
         """
 
@@ -56,18 +56,15 @@ class Email(object):
         self.messages = messages
 
     def connect(self):
-        try:
-            mail = poplib.POP3_SSL(self.host)
-            self.welcome = mail.getwelcome()
-            mail.user(self.username)
-            mail.pass_(self.password)
-            self.stat = mail.stat()
-            self.list = mail.list()
-            self.num_messages = len(self.list[1])
-            self.mail = mail
-            self.is_connected = True
-        except:
-            print "Failed to connect"
+        mail = poplib.POP3_SSL(self.host)
+        self.welcome = mail.getwelcome()
+        mail.user(self.username)
+        mail.pass_(self.password)
+        self.stat = mail.stat()
+        self.list = mail.list()
+        self.num_messages = len(self.list[1])
+        self.mail = mail
+        self.is_connected = True
 
     def disconnect(self):
         if self.mail:
@@ -124,12 +121,12 @@ class EmailCommand(Email):
                 except:
                     print "Failed to run command"
 
-    def cleanup(self):
-        Email.disconnect(self)
-
     def __init__(self, username=None, password=None, host=None):
         Email.__init__(self, username, password, host)
-        Email.connect(self)
 
-    def __del__(self):
-        self.cleanup()
+    def __enter__(self):
+        self.connect()
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.disconnect()
